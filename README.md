@@ -1,1 +1,1 @@
-# linux自用程序
+# linux脚本
