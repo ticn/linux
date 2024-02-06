@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# wget -qO- https://raw.githubusercontent.com/ngxson/public-assets/main/install-windows-gcp.sh | sudo bash
+# wget -qO- https://raw.githubusercontent.com/ticn/linux/main/install-windows-gcp.sh | sudo bash
 
 IMAGE_URL="https://huggingface.co/datasets/uzvme/xiaoheiyangmao/resolve/main/Tiny_10_202301.vhd.gz"
 
