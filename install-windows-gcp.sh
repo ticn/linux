@@ -2,7 +2,8 @@
 
 # wget -qO- https://raw.githubusercontent.com/ticn/linux/main/install-windows-gcp.sh | sudo bash
 
-IMAGE_URL="https://huggingface.co/datasets/uzvme/xiaoheiyangmao/resolve/main/Tiny_10_202301.vhd.gz"
+IMAGE_URL="https://huggingface.co/datasets/uzvme/xiaoheiyangmao/resolve/main/tiny10_23h2.xz"
+# IMAGE_URL="https://huggingface.co/datasets/uzvme/xiaoheiyangmao/resolve/main/tiny11_23h2.xz"
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -17,7 +18,7 @@ echo "    DOWNLOADING WINDOWS IMAGE FILE..."
 echo ""
 echo ""
 
-wget -O Tiny_10_202301.vhd.gz $IMAGE_URL
+wget -O windows.xz $IMAGE_URL
 
 # get all block devices, sort by SIZE to get the biggest device
 DESTINATION_DEVICE="$(lsblk -x SIZE -o NAME,SIZE | tail -n1 | cut -d ' ' -f 1)"
@@ -40,7 +41,7 @@ echo ""
 # then, use dd to copy image
 echo "Destination device is $DESTINATION_DEVICE"
 echo "Running dd command..."
-pigz -dc ./Tiny_10_202301.vhd.gz | sudo dd of="/dev/$DESTINATION_DEVICE" bs=4M
+pigz -dc ./windows.xz | sudo dd of="/dev/$DESTINATION_DEVICE" bs=4M
 
 echo ""
 echo ""
