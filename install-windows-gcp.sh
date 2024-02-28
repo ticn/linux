@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# wget -qO- https://raw.githubusercontent.com/ticn/linux/main/install-windows-gcp.sh | sudo bash
+# wget -qO- https://raw.githubusercontent.com/ngxson/public-assets/main/install-windows-gcp.sh | sudo bash
 
 IMAGE_URL="https://oss.sunpma.com/Windows/Win10_2021LTSC_64_Administrator_nat.ee.gz"
 
@@ -17,7 +17,7 @@ echo "    DOWNLOADING WINDOWS IMAGE FILE..."
 echo ""
 echo ""
 
-wget -O Windows/Win10_2021LTSC_64_Administrator_nat.ee.gz $IMAGE_URL
+wget -O Win10_2021LTSC_64_Administrator_nat.ee.gz $IMAGE_URL
 
 # get all block devices, sort by SIZE to get the biggest device
 DESTINATION_DEVICE="$(lsblk -x SIZE -o NAME,SIZE | tail -n1 | cut -d ' ' -f 1)"
@@ -40,7 +40,7 @@ echo ""
 # then, use dd to copy image
 echo "Destination device is $DESTINATION_DEVICE"
 echo "Running dd command..."
-pigz -dc ./Windows/Win10_2021LTSC_64_Administrator_nat.ee.gz | sudo dd of="/dev/$DESTINATION_DEVICE" bs=4M
+pigz -dc ./Win10_2021LTSC_64_Administrator_nat.ee.gz | sudo dd of="/dev/$DESTINATION_DEVICE" bs=4M
 
 echo ""
 echo ""
