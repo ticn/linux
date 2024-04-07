@@ -1,0 +1,16 @@
+# talkatone
+
+DOMAIN-SUFFIX,mobilefuse.com,Talkatone
+DOMAIN-SUFFIX,inmobi.com,Talkatone
+DOMAIN-SUFFIX,crashlytics.com,Talkatone
+DOMAIN-SUFFIX,talkatone.com,Talkatone
+DOMAIN-SUFFIX,kochava.com,Talkatone
+DOMAIN-SUFFIX,tktn.be,Talkatone
+DOMAIN-SUFFIX,cohere.com,Talkatone
+DOMAIN-SUFFIX,ip-api.com,Talkatone
+DOMAIN-SUFFIX,agkn.com,Talkatone
+DOMAIN-SUFFIX,tktn.at,Talkatone
+IP-CIDR,50.117.27.0/24,Talkatone
+IP-CIDR,69.46.75.0/24,Talkatone
+IP-CIDR,205.164.56.0/24,Talkatone
+IP-CIDR,63.251.124.0/24,Talkatone
