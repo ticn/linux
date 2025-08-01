@@ -17,13 +17,28 @@ NOW=$(date '+%Y-%m-%d %H:%M:%S')
 YEAR_MONTH=$(date +%Y-%m)
 DAY=$(date +%d)
 
-# 📊 获取当月 RX / TX（GiB）
-read RX_GB TX_GB <<< $(vnstat -m | awk -v ym="$YEAR_MONTH" '
-  $1 == ym {
-    gsub(",", ".", $2); gsub(",", ".", $5);
-    print $2, $5;
-    exit
-}')
+# 🚩 单位转换函数（统一转 GiB）
+parse_gib() {
+  local value unit result
+  value=$(echo "$1" | sed 's/,/./')
+  unit=$2
+  case "$unit" in
+    KiB) result=$(awk "BEGIN { printf \"%.6f\", $value / 1024 / 1024 }") ;;
+    MiB) result=$(awk "BEGIN { printf \"%.6f\", $value / 1024 }") ;;
+    GiB) result=$value ;;
+    TiB) result=$(awk "BEGIN { printf \"%.6f\", $value * 1024 }") ;;
+    *) result=0 ;;
+  esac
+  echo "$result"
+}
+
+# 📊 获取当月 RX / TX（带单位）
+read RX_VAL RX_UNIT TX_VAL TX_UNIT <<< $(vnstat -m | awk -v ym="$YEAR_MONTH" '
+  $1 == ym { print $2, $3, $5, $6; exit }
+')
+
+RX_GB=$(parse_gib "$RX_VAL" "$RX_UNIT")
+TX_GB=$(parse_gib "$TX_VAL" "$TX_UNIT")
 
 # ❗ 无法解析流量
 if [[ -z "$RX_GB" || -z "$TX_GB" ]]; then
@@ -48,15 +63,15 @@ if [[ "$DAY" == "01" ]]; then
 fi
 
 # ⚠️ 判断是否超出限制（按 RX + TX）
-RX_VAL=$(echo "$RX_GB" | grep -oE '^[0-9]+(\.[0-9]+)?$')
-TX_VAL=$(echo "$TX_GB" | grep -oE '^[0-9]+(\.[0-9]+)?$')
+RX_VAL_NUM=$(echo "$RX_GB" | grep -oE '^[0-9]+(\.[0-9]+)?$')
+TX_VAL_NUM=$(echo "$TX_GB" | grep -oE '^[0-9]+(\.[0-9]+)?$')
 
-if [[ -z "$RX_VAL" || -z "$TX_VAL" ]]; then
+if [[ -z "$RX_VAL_NUM" || -z "$TX_VAL_NUM" ]]; then
   echo "❌ 流量数据无效"
   exit 1
 fi
 
-TOTAL_VAL=$(awk -v rx="$RX_VAL" -v tx="$TX_VAL" 'BEGIN { printf "%.2f", rx + tx }')
+TOTAL_VAL=$(awk -v rx="$RX_VAL_NUM" -v tx="$TX_VAL_NUM" 'BEGIN { printf "%.2f", rx + tx }')
 
 LIMIT_REACHED=$(awk -v total="$TOTAL_VAL" -v limit="$LIMIT_GB" 'BEGIN { print (total >= limit) ? 1 : 0 }')
 
